@@ -1,28 +1,46 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+
+import { connect } from "react-redux";
+
+//Components
+import List from "./List";
+import ListAddBox from "./ListAddBox";
 
 class App extends Component {
   render() {
+    let watchlist = this.props.movies.filter(movie => movie.status === false);
+    let watchedlist = this.props.movies.filter(movie => movie.status === true);
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="App ">
+        <div className="container">
+          <ListAddBox />
+          <div className="row">
+            <List
+              className="col-6 "
+              movielist={watchlist}
+              stat="Watch"
+              title="Watch List"
+            />
+            <List
+              className="col-6 "
+              movielist={watchedlist}
+              stat="UnWatch"
+              title="Watched List"
+            />
+          </div>
+        </div>
       </div>
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    movies: state.rootMovie.movies
+  };
+};
 
-export default App;
+export default connect(
+  mapStateToProps,
+  null
+)(App);
